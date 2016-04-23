@@ -2,7 +2,7 @@
 module Chapter1Exercise2 where
 import System.Environment
 
--- Exercise 1:
+-- Exercise 2:
 -- Change the program so it performs a simple arithmetic operation on the two
 -- arguments and prints out the result. You can use read to convert a string to
 -- a number, and show to convert a number back into a string. Play around with
