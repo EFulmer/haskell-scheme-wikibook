@@ -1,5 +1,5 @@
 -- Chapter1Exercise2.hs
-module Chapter1Ex1 where
+module Chapter1Exercise2 where
 import System.Environment
 
 -- Exercise 1:
