@@ -1,9 +1,9 @@
--- Exercises/Ch2/Pt1/Ex5.hs
-module Ex5 where
+-- Exercises/Ch2/Pt1/Ex6.hs
+module Ex6 where
 
--- Exercise 5
--- Add a `Character` constructor to `LispVal`, and create a parser for character
--- literals as defined in R5RS.
+-- Exercise 6
+-- Add a `Float` constructor to `LispVal`, and create a parser for character
+-- literals as described in R5RS.
 
 import Data.Char                            (digitToInt, isSpace)
 import Control.Monad
