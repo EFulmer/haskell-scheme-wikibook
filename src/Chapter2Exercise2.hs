@@ -1,9 +1,12 @@
--- Chapter2Exercise1Part2.hs
-module Chapter2Exercise1Part2 where
+-- Chapter2Exercise2.hs
+module Chapter2Exercise2 where
 
--- Exercise 1.
--- Rewrite parseNumber, without liftM, using
--- 2. explicit sequencing with the >>= operator
+-- Exercise 2.
+-- Our strings aren't quite R5RS compliant, because they don't support escaping
+-- of internal quotes within the string. Change `parseString` so that `\"` gives a
+-- literal quote character instead of terminating the string. You may want to
+-- replace `noneOf "\""` with a new parser action that accepts *either* a
+-- non-quote character *or* a backslash followed by a quote mark.
 
 import Control.Monad
 import System.Environment
@@ -16,6 +19,20 @@ data LispVal = Atom String
              | Number Integer
              | String String
              | Bool Bool
+             deriving Show
+
+parseString' :: Parser LispVal
+parseString' = do
+  char '"'
+  -- order is important here; need to try parsing an escaped quote first because
+  -- otherwise we fail when we reach the quotation character of the escape
+  -- sequence
+  x <- many $ choice [escQuote, nonQuote]
+  char '"'
+  return $ String x
+  where
+    nonQuote = noneOf "\""
+    escQuote = char '\\' >> char '\"'
 
 parseString :: Parser LispVal
 parseString = do
@@ -47,7 +64,7 @@ parseNumber'' = (many1 digit) >>= (\x -> return $ (Number . read) x)
 
 parseExpr :: Parser LispVal
 parseExpr = parseAtom
-         <|> parseString
+         <|> parseString'
          <|> parseNumber'
 
 symbol :: Parser Char
