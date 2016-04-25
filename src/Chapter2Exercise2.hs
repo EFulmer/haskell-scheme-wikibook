@@ -19,7 +19,7 @@ data LispVal = Atom String
              | Number Integer
              | String String
              | Bool Bool
-             deriving Show
+             deriving Show -- added for debug purposes!
 
 parseString' :: Parser LispVal
 parseString' = do
