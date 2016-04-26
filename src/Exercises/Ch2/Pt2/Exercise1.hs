@@ -70,8 +70,15 @@ parseQuoted = do
 
 -- TODO this and parseQuoted should probably be refactored into a single fn.
 parseQuasiQuoted :: Parser LispVal
-parseQuasiQuoted = (char ',') >> parseExpr >>= (\x -> return $ List [Atom "quasiquote", x])
+parseQuasiQuoted = (char ',') >> parseExpr >>= 
+                    (\x -> return $ List [Atom "quasiquote", x])
 
+parseAtQuasiQuote :: Parser LispVal
+parseAtQuasiQuote = (string ",@") >> parseExpr >>= 
+                      (\x -> return $ List [Atom "at quasiquote", x])
+
+parseQuotation :: Parser LispVal
+parseQuotation = parseQuoted <|> (try parseQuasiQuoted) <|> (try parseAtQuasiQuote)
 
 -- End recursive parsers.
 
