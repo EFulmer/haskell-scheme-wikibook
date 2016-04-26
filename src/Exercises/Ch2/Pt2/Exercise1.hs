@@ -1,5 +1,9 @@
--- Base.hs
-module Base where
+-- Exercise1.hs
+module Exercise1 where
+
+-- Exercise 1.
+-- Add support for the backquote syntactic sugar: the Scheme standard details
+-- what it should expand into (quasiquote/unquote).
 
 import Control.Monad
 import System.Environment
@@ -64,6 +68,11 @@ parseQuoted = do
   x <- parseExpr
   return $ List [Atom "quote", x]
 
+-- TODO this and parseQuoted should probably be refactored into a single fn.
+parseQuasiQuoted :: Parser LispVal
+parseQuasiQuoted = (char ',') >> parseExpr >>= (\x -> return $ List [Atom "quasiquote", x])
+
+
 -- End recursive parsers.
 
 parseExpr :: Parser LispVal
@@ -71,6 +80,7 @@ parseExpr = parseAtom
          <|> parseString
          <|> parseNumber
          <|> parseQuoted
+         <|> parseQuasiQuoted
          -- TODO maybe refactor this into a general parseAnyList?
          -- I just don't like the ro and char actions included amidst the
          -- self-contained parse[Atom/String/Number/Quoted] functions.
