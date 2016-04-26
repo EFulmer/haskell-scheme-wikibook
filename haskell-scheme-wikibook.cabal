@@ -18,6 +18,7 @@ library
   exposed-modules:     Lib
   build-depends:       base >= 4.7 && < 5
                      , parsec
+                     , array
   default-language:    Haskell2010
 
 executable haskell-scheme-wikibook-exe
@@ -26,7 +27,6 @@ executable haskell-scheme-wikibook-exe
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , haskell-scheme-wikibook
-                     , parsec
   default-language:    Haskell2010
 
 test-suite haskell-scheme-wikibook-test
@@ -35,7 +35,6 @@ test-suite haskell-scheme-wikibook-test
   main-is:             Spec.hs
   build-depends:       base
                      , haskell-scheme-wikibook
-                     , parsec
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010
 
