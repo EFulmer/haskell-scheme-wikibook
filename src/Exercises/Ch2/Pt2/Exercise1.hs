@@ -68,17 +68,24 @@ parseQuoted = do
   x <- parseExpr
   return $ List [Atom "quote", x]
 
--- TODO this and parseQuoted should probably be refactored into a single fn.
+-- TODO these could be refactored into a single fn.
 parseQuasiQuoted :: Parser LispVal
-parseQuasiQuoted = (char ',') >> parseExpr >>= 
-                    (\x -> return $ List [Atom "quasiquote", x])
+parseQuasiQuoted = do
+  char '`'
+  x <- parseExpr
+  return $ List [Atom "quasiquote", x]
 
-parseAtQuasiQuote :: Parser LispVal
-parseAtQuasiQuote = (string ",@") >> parseExpr >>= 
-                      (\x -> return $ List [Atom "at quasiquote", x])
+parseUnQuote :: Parser LispVal
+parseUnQuote = do
+  char ','
+  x <- parseExpr
+  return $ List [Atom "unquote", x]
 
-parseQuotation :: Parser LispVal
-parseQuotation = parseQuoted <|> (try parseQuasiQuoted) <|> (try parseAtQuasiQuote)
+parseAtUnQuote :: Parser LispVal
+parseAtUnQuote = do
+  string ",@"
+  x <- parseExpr
+  return $ List [Atom "at-unquote", x]
 
 -- End recursive parsers.
 
@@ -88,8 +95,10 @@ parseExpr = parseAtom
          <|> parseNumber
          <|> parseQuoted
          <|> parseQuasiQuoted
+         <|> (try parseUnQuote)
+         <|> parseAtUnQuote
          -- TODO maybe refactor this into a general parseAnyList?
-         -- I just don't like the ro and char actions included amidst the
+         -- I just don't like the do and char actions included amidst the
          -- self-contained parse[Atom/String/Number/Quoted] functions.
          <|> do char '('
                 x <- try parseList <|> parseDottedList
